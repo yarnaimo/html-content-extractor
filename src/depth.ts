@@ -7,6 +7,6 @@ const _getDepth = (e: HTMLElement, _baseDepth = 0): number => {
 
 export const getDepthScore = (e: HTMLElement) => {
   const depth = _getDepth(e)
-  const score = depth ** 0.375
+  const score = depth ** 0.4
   return score
 }
