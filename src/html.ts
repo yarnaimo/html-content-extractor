@@ -1,16 +1,19 @@
 import { getDepthScore } from './depth'
 import { getSizeScore } from './size'
 
-const defaultExcludedSelector = 'aside'
+const defaultExcludedSelector = 'aside,[role="complementary"]'
+const highPrioritySelector = 'article,[role="article"],[class*="article"]'
 
 const getAllElements = () => [...document.body.getElementsByTagName('*')]
 
 export const getScore = ({
   element,
+  baseScore,
   excludedElements,
   heightCutoff,
 }: {
   element: HTMLElement
+  baseScore: number
   excludedElements: Element[]
   heightCutoff: number
 }) => {
@@ -20,7 +23,7 @@ export const getScore = ({
     sizeScore,
     getDetailedScores: () => {
       const depthScore = getDepthScore(element)
-      const score = sizeScore * depthScore
+      const score = baseScore * sizeScore * depthScore
       return { sizeScore, depthScore, score }
     },
   }
@@ -40,8 +43,11 @@ export const getHigherScoreElements = (
       if (!(element instanceof HTMLElement)) {
         return []
       }
+      const baseScore = element.matches(highPrioritySelector) ? 1.25 : 1
+
       const { sizeScore, getDetailedScores } = getScore({
         element,
+        baseScore,
         excludedElements,
         heightCutoff,
       })
