@@ -8,16 +8,16 @@ const parse = (str: string) => {
 
 const _getOuterWidth = (e: HTMLElement) => {
   const { marginLeft, marginRight } = window.getComputedStyle(e)
-  const margin = parse(marginLeft) + parse(marginRight)
+  const width = e.offsetWidth + parse(marginLeft) + parse(marginRight)
 
-  return e.offsetWidth + margin
+  return Math.min(document.documentElement.scrollWidth, width)
 }
 
 const _getOuterHeight = (e: HTMLElement, heightCutoff: number) => {
   const { marginTop, marginBottom } = window.getComputedStyle(e)
-  const margin = parse(marginTop) + parse(marginBottom)
+  const height = e.offsetHeight + parse(marginTop) + parse(marginBottom)
 
-  return Math.min(heightCutoff, e.offsetHeight + margin)
+  return Math.min(document.documentElement.scrollHeight, height, heightCutoff)
 }
 
 const _getOuterSize = (e: HTMLElement, heightCutoff: number) =>
